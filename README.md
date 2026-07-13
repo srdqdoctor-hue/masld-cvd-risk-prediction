@@ -1,12 +1,5 @@
 # masld-cvd-risk-prediction
 EHR-based ML pipeline for MACE risk prediction in MASLD — OMOP CDM ETL, cohort construction, XGBoost, SHAP
-# Code Sample — Rong-Dong-Qing Shi
-
-Prepared for confidential PhD application review.
-
----
-
-## Overview
 
 This folder contains representative code from two interconnected research
 projects:
