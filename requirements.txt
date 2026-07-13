@@ -1,0 +1,33 @@
+# Python dependencies for the MASLD-CVD ML pipeline
+# Tested on Python 3.10 / 3.11
+# Install with: pip install -r requirements.txt
+
+# Core ML
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.3
+xgboost>=2.0
+lightgbm>=4.0
+shap>=0.44
+
+# Plotting
+matplotlib>=3.7
+seaborn>=0.12
+
+# Utilities
+scipy>=1.11
+joblib>=1.3
+pathlib2>=2.3       # backport if needed; built-in on Python 3.4+
+
+# R packages used in EHR scripts (install via install.packages() in R >= 4.3):
+# data.table  >= 1.14
+# dplyr       >= 1.1
+# stringr     >= 1.5
+# lubridate   >= 1.9
+# DBI         >= 1.2
+# RPostgres   >= 1.4
+
+# OHDSI ecosystem (R):
+# DatabaseConnector  >= 6.3  (CRAN)
+# Achilles           >= 1.7  (CRAN / OHDSI GitHub)
+# DataQualityDashboard >= 2.6 (OHDSI GitHub)

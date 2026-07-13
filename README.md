@@ -1,5 +1,10 @@
-# masld-cvd-risk-prediction
-EHR-based ML pipeline for MACE risk prediction in MASLD — OMOP CDM ETL, cohort construction, XGBoost, SHAP
+# Code Sample — Rong-Dong-Qing Shi
+
+Prepared for confidential PhD application review.
+
+---
+
+## Overview
 
 This folder contains representative code from two interconnected research
 projects:
@@ -63,29 +68,29 @@ Rabbit-in-a-Hat, and Usagi.
 
 ### Staging scripts (`stage_*.R`)
 
-| Script          | Content                                                      |
-| --------------- | ------------------------------------------------------------ |
-| `stage_diag.R`  | Flattens list-of-list ICD-10 diagnosis RDS structures into a relational staging table; handles nested visit-level coding |
-| `stage_lab.R`   | Extracts lab measurements from wide-format EHR export, pivots to long format, attaches local lab codes for Usagi mapping |
+| Script | Content |
+| --- | --- |
+| `stage_diag.R` | Flattens list-of-list ICD-10 diagnosis RDS structures into a relational staging table; handles nested visit-level coding |
+| `stage_lab.R` | Extracts lab measurements from wide-format EHR export, pivots to long format, attaches local lab codes for Usagi mapping |
 | `stage_visit.R` | Extracts inpatient/outpatient visit records; derives earliest/latest visit dates per patient for observation period construction |
-| `stage_atc.R`   | Combines per-ATC-code prescription sub-tables into a single staging table; standardises dose units and administration routes; memory-efficient via `data.table::rbindlist` |
+| `stage_atc.R` | Combines per-ATC-code prescription sub-tables into a single staging table; standardises dose units and administration routes; memory-efficient via `data.table::rbindlist` |
 
 ### ETL scripts (R + SQL)
 
-| Script                             | Content                                                      |
-| ---------------------------------- | ------------------------------------------------------------ |
-| `etl_person_observation_period.R`  | Source-to-CDM mapping for `person`, `care_site`, and `observation_period`; gender vocabulary mapping (Chinese source → OMOP standard concepts) |
-| `build_condition_occurrence.sql`   | Joins staged diagnoses to OMOP `concept` table for standard concept assignment; constructs `condition_type_concept_id` and visit linkage |
-| `build_drug_exposure_fixed.sql`    | Maps ATC-coded prescriptions to OMOP drug concepts; handles dose era logic and route standardisation |
+| Script | Content |
+| --- | --- |
+| `etl_person_observation_period.R` | Source-to-CDM mapping for `person`, `care_site`, and `observation_period`; gender vocabulary mapping (Chinese source → OMOP standard concepts) |
+| `build_condition_occurrence.sql` | Joins staged diagnoses to OMOP `concept` table for standard concept assignment; constructs `condition_type_concept_id` and visit linkage |
+| `build_drug_exposure_fixed.sql` | Maps ATC-coded prescriptions to OMOP drug concepts; handles dose era logic and route standardisation |
 | `build_measurement_occurrence.sql` | Maps local lab codes (post-Usagi) to OMOP measurement concepts; preserves unit concepts and range flags |
-| `t2d_cdm_build.sql`                | End-to-end CDM population script for the T2DM cohort; demonstrates transaction-level rebuild pattern |
+| `t2d_cdm_build.sql` | End-to-end CDM population script for the T2DM cohort; demonstrates transaction-level rebuild pattern |
 
 ### Quality assessment
 
-| Script               | Content                                                      |
-| -------------------- | ------------------------------------------------------------ |
+| Script | Content |
+| --- | --- |
 | `run_achilles_t2d.R` | Runs ACHILLES characterisation to generate ARES data quality dashboards; stores results in `results` schema |
-| `run_dqd.R`          | Executes all ~3 500 DQD checks (TABLE / FIELD / CONCEPT level); exports pass/fail JSON for ARES viewer; summarises top failing checks |
+| `run_dqd.R` | Executes all ~3 500 DQD checks (TABLE / FIELD / CONCEPT level); exports pass/fail JSON for ARES viewer; summarises top failing checks |
 
 ---
 
@@ -126,14 +131,14 @@ baseline feature matrix for machine learning.
 
 End-to-end prediction pipeline in Python / scikit-learn:
 
-| Step                  | Detail                                                       |
-| --------------------- | ------------------------------------------------------------ |
-| **Imputation**        | `IterativeImputer` (MICE-style) for continuous features; zero-fill for binary medication / comorbidity flags |
+| Step | Detail |
+| --- | --- |
+| **Imputation** | `IterativeImputer` (MICE-style) for continuous features; zero-fill for binary medication / comorbidity flags |
 | **Feature selection** | RFECV with XGBoost estimator, 5-fold stratified CV, AUROC scoring |
-| **Model comparison**  | 10-fold stratified CV across 9 models: Logistic Regression, Random Forest, XGBoost, LightGBM, Extra Trees, AdaBoost, Decision Tree, Gradient Boosting, SVM |
-| **Tuning**            | `RandomizedSearchCV` (50 iterations) over XGBoost hyperparameter space |
-| **Calibration**       | Isotonic regression post-hoc calibration on a held-out validation fold |
-| **Evaluation**        | AUROC, AUPRC, Brier score, sensitivity, specificity, PPV, NPV, F1; calibration curve; decision curve analysis (DCA) |
+| **Model comparison** | 10-fold stratified CV across 9 models: Logistic Regression, Random Forest, XGBoost, LightGBM, Extra Trees, AdaBoost, Decision Tree, Gradient Boosting, SVM |
+| **Tuning** | `RandomizedSearchCV` (50 iterations) over XGBoost hyperparameter space |
+| **Calibration** | Isotonic regression post-hoc calibration on a held-out validation fold |
+| **Evaluation** | AUROC, AUPRC, Brier score, sensitivity, specificity, PPV, NPV, F1; calibration curve; decision curve analysis (DCA) |
 
 A **synthetic dataset generator** (`generate_mock_dataset()`) is included so
 the full pipeline can be run without access to patient data — realistic
