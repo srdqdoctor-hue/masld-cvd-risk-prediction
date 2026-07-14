@@ -145,7 +145,7 @@ the full pipeline can be run without access to patient data — realistic
 feature distributions, ~18% MACE event rate, and structured missingness
 patterns (HbA1c 25%, Cystatin C 30%, uACR 40%, NT-proBNP 45%, cTnT 50%).
 
-### `shap_model_interpretation.py` — responsible AI interpretation
+### `shap_model_interpretation.py` — SHAP-based model explanation
 
 - **Global explanations**: beeswarm summary plot (feature value vs SHAP
   contribution) and mean |SHAP| bar chart with clinically labelled features.
@@ -154,10 +154,9 @@ patterns (HbA1c 25%, Cystatin C 30%, uACR 40%, NT-proBNP 45%, cTnT 50%).
 - **Patient-level explanations**: waterfall plots for correctly classified
   high-risk (TP) and low-risk (TN) patients, demonstrating individual-level
   interpretability.
-- **Responsible AI caveat**: the script explicitly documents that high SHAP
-  importance for medication features (statins, antiplatelets) reflects
-  *confounding by indication* — a known pitfall in observational EHR-based
-  models that should inform any clinical deployment decision.
+- **Clinical interpretation note**: the script explicitly documents that high
+  SHAP importance for medication features (statins, antiplatelets) reflects confounding
+  by indication rather than causal protection, and should not be interpreted as clinical recommendations.
 
 ---
 
